@@ -262,7 +262,7 @@ from fastapi import FastAPI, Depends
 
 @app.post("/students")
 def create_student(student: Student, redis_client: redis.Redis = Depends(get_redis_client)):
-    # do something with your redis_client, like saving data to a key
+    # do something with your redis_client, like saving biz to a key
     ...
 ```
 

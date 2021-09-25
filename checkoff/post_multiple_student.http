@@ -1,0 +1,18 @@
+POST http://127.0.0.1:8000/student/postmultiple HTTP/1.1
+Content-Type: application/json
+
+[
+    {
+        "name": "Alice",
+        "id": "1004803"
+    },
+    {
+        "name": "Bob",
+        "id": "1004529"
+    },
+    {
+        "name": "Charlie",
+        "id": "1004910",
+        "gpa": 5.0
+    }
+]
