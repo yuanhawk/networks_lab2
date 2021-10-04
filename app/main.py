@@ -1,17 +1,39 @@
-from model.student import *
-from model.log import Message
-from biz.db import *
-from data.server import *
-
-from fastapi import Depends, status
-from fastapi.responses import JSONResponse
-
 from typing import Optional
 
+from fastapi import Depends, status
+# from fastapi import File, UploadFile
+from fastapi.responses import JSONResponse, HTMLResponse
+
+from biz.db import *
+from data.server import *
+from model.log import Message
+from model.student import *
+
+
 # GET methods
-@app.get('/')
-def read_root(c: Redis = Depends(cache)):
-    return 'Welcome To Model Student Page'
+@app.get('/', response_class=HTMLResponse)
+def read_root():
+    return """
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <title>Welcome To Model Student Page</title>
+        </head>
+        <body>
+            Welcome To Model Student Page
+            <form action="/files/" enctype="multipart/form-data" method="post">
+                <input name="files" type="file" multiple>
+                <input type="submit">
+            </form>
+            <form action="/uploadfiles/" enctype="multipart/form-data" method="post">
+                <input name="files" type="file" multiple>
+                <input type="submit">
+            </form>
+        </body>
+    </html>
+    """
+    # return 'Welcome To Model Student Page'
 
 @app.get('/students')
 def read_root(c: Redis = Depends(cache)):
@@ -74,6 +96,15 @@ def create_students(students: List[Student], c: Redis = Depends(cache)):
         upsert_student(s.id, dict(s), c)
         response.append(s.name + ' credentials created')
     return JSONResponse(status_code=status.HTTP_200_OK, content={'message': '; '.join(response)})
+
+# @app.post("/files/")
+# async def create_files(files: List[bytes] = File(...)):
+#     return {"file_sizes": [len(file) for file in files]}
+#
+#
+# @app.post('/uploadfiles')
+# def create_multiform(files: List[UploadFile] = File(...), c: Redis = Depends(cache)):
+#     return {"filenames": [file.filename for file in files]}
 
 
 # DELETE methods

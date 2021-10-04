@@ -288,10 +288,19 @@ Interfacing with redis is a implementation detail and left for you to figure out
         - that deletes or updates a _single_ resource respectively
         - show that the resource has indeed been modified through another HTTP request = has validation and returns an appropiate HTTP response code if the input data is invalid (e.g. trying to delete a nonexistent user)
 - Identify which routes in your application are _idempotent_, and provide proof to support your answer.
+  - Post is not idempotent. Get, Put and Delete are idempotent.
+  - Post is used to create new resources, for example, the user details are created, and thus mutating the number of stored
+  data on the server.
+  - Get does not change the resource state on the server, thus it is idempotent.
+  - Put does not change the number of data, but it just updates current resources, thus it is idempotent.
+  - Delete does not change the resource state on the server because the original resource is deleted, and thus it is idempotent.
 - Implement at least two of the following challenges:
     - File upload in a POST request, using multipart/form-data
+      - I added a form appending multi-files but the dependencies python-multipart failed
     - Have a route in your application that returns a content type that is not _plaintext_
+      - In the Get '/', I returned html type
     - Some form of authorization through inspecting the request headers
     - A special route that can perform a batch delete or update of resources matching a certain condition
+      - batch delete can be enacted using the delete_all.http, update of resources can be done using update_alice.http
 
 > You must provide ample documentation on how to build & run your code and how to make the HTTP requests to your API, as well as what are the expected responses for each request. You will not be deducted if your program is slow or unoptimised, but bonus points may be given if you show meaningful thought in analysing how performance was / can be improved in your application.
